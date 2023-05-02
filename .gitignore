@@ -94,6 +94,6 @@ tags
 compile_commands.json
 .cache/
 .clang-format
-btPenButton
+bt-pen-button
 
 # End of https://www.toptal.com/developers/gitignore/api/c,linux,vim
