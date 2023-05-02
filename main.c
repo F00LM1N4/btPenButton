@@ -20,6 +20,7 @@
  *
  */
 
+// Includes ____________________________________________________________________
 #include <libudev.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,6 +28,13 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+// Defines _____________________________________________________________________
+#define BT_DEVICE_NAME					"hci0:3585"
+
+#define PROGRAM_NAME					"xournalpp"
+#define PROGRAM_ARGS					""
+
+// Functions ___________________________________________________________________
 int main()
 {
 	struct udev *udev;
@@ -66,10 +74,8 @@ int main()
 			if (dev)
 			{
 				if (strcmp(udev_device_get_action(dev), "add") == 0 &&
-				    strcmp(udev_device_get_sysname(dev), "hci0:3585") == 0)
+				    strcmp(udev_device_get_sysname(dev), BT_DEVICE_NAME) == 0)
 				{
-					// printf("Start xournalpp. \n");
-
 					pid = fork();
 					if (pid < 0)
 					{
@@ -78,7 +84,7 @@ int main()
 					}
 					else if (pid == 0)
 					{
-						execlp("flameshot", "flameshot", "gui", NULL);
+						execlp(PROGRAM_NAME, PROGRAM_NAME, PROGRAM_ARGS, NULL);
 					}
 				}
 				/* free dev */
