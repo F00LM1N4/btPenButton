@@ -1,7 +1,7 @@
 # Info @ http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 # Application name
-NAME	:= btPenButton
+NAME	:= bt-pen-button
 
 # Directories
 IDIR 	:= ./

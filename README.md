@@ -1,4 +1,11 @@
-udev-examples
-=============
+# bt-pen-button
 
-This program acts as a daemon, using libudev cheks if a device with a proper name is added. If an event triggers a match the program forks and spawns another program.
+This program is based on udev-examples.
+
+This program aims to be daemon that excutes a command whenever the 
+bluetooth button on top of styluses gets pressed.
+
+## Proof of concept
+
+For now this program is just a proof of concept.
+
