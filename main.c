@@ -21,34 +21,54 @@
  */
 
 // Includes ____________________________________________________________________
-#include <libudev.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
+#include <unistd.h>
+#include <libudev.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h>
 
 // Defines _____________________________________________________________________
-#define BT_DEVICE_NAME					"hci0:3585"
+#define BT_DEVICE_NAME					"hci0:129"
 
-#define PROGRAM_NAME					"xournalpp"
+#define PROGRAM_RPATH					".config/btpenbutton"
+#define PROGRAM_NAME					"btpenbutton.sh"
 #define PROGRAM_ARGS					""
+
+typedef enum
+{
+	EXIT_ERR_GETENV=1,
+	EXIT_ERR_UDEV,
+	EXIT_ERR_FORK,
+} exit_error_t;
+
 
 // Functions ___________________________________________________________________
 int main()
 {
+	char program[256] = {0};
 	struct udev *udev;
 	struct udev_device *dev;
 	struct udev_monitor *mon;
 	int fd;
 	pid_t pid;
 
+	/* Get home directory from env*/
+	char * home = getenv("HOME");
+	if(home == NULL)
+		exit(EXIT_ERR_GETENV);
+	strcat(program, home);
+	strcat(program, "/" PROGRAM_RPATH "/" PROGRAM_NAME);
+	printf("%s\n", program);
+
 	/* create udev object */
 	udev = udev_new();
 	if (!udev)
 	{
 		fprintf(stderr, "Can't create udev\n");
-		return 1;
+		return EXIT_ERR_UDEV;
 	}
 
 	mon = udev_monitor_new_from_netlink(udev, "udev");
@@ -73,6 +93,8 @@ int main()
 			dev = udev_monitor_receive_device(mon);
 			if (dev)
 			{
+				printf("%s \n %s \n", udev_device_get_sysname(dev), 
+						udev_device_get_devtype(dev));
 				if (strcmp(udev_device_get_action(dev), "add") == 0 &&
 				    strcmp(udev_device_get_sysname(dev), BT_DEVICE_NAME) == 0)
 				{
@@ -80,11 +102,11 @@ int main()
 					if (pid < 0)
 					{
 						printf("Error in forking. \n");
-						return 1;
+						return EXIT_ERR_FORK;
 					}
 					else if (pid == 0)
 					{
-						execlp(PROGRAM_NAME, PROGRAM_NAME, PROGRAM_ARGS, NULL);
+						execlp(program, program, PROGRAM_ARGS, NULL);
 					}
 				}
 				/* free dev */
