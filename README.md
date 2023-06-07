@@ -9,3 +9,8 @@ bluetooth button on top of styluses gets pressed.
 
 For now this program is just a proof of concept.
 
+## Additions
+
+- Add a control to check if the script exists under `.config`.
+- Redirect the logs to `/var`
+
