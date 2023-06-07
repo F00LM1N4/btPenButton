@@ -30,9 +30,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-// Defines _____________________________________________________________________
+// Macros ______________________________________________________________________
 #define BT_DEVICE_NAME					"hci0:129"
 
+#define PROGRAM_NAME_LEN				256
 #define PROGRAM_RPATH					".config/btpenbutton"
 #define PROGRAM_NAME					"btpenbutton.sh"
 #define PROGRAM_ARGS					""
@@ -48,7 +49,7 @@ typedef enum
 // Functions ___________________________________________________________________
 int main()
 {
-	char program[256] = {0};
+	char program[PROGRAM_NAME_LEN] = {0};
 	struct udev *udev;
 	struct udev_device *dev;
 	struct udev_monitor *mon;
